@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Boilerplate</title>
+	<!-- CSS FILES -->      
+	<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-icons.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+	<!-- ALERTS -->   
+	 <div class="alerts">
+	{% with messages = get_flashed_messages(with_categories=true) %}
+	{% if messages %}
+		{% for category, message in messages %}
+		<div class="alerts"  style="display: flex; justify-content:center; font-size: 18px; "><i class="bi-exclamation-triangle me-2"></i>
+			{{message}}  
+		</div>
+		{% endfor %}
+	{% endif %}
+	{% endwith %}
+	</div>
+
+<!--TOP NAVIGATION-->
+
+	<nav id="home"  class="py-2 bg-body-tertiary border-bottom">
+		<div id="topMenu" class="container d-flex flex-flex-sm-nowrap ">
+			<ul class="nav flex-row ">
+				<li class="nav-item">
+					<a class="nav-link link-body-emphasis px-2 active {% if request.path == url_for('view_bp.home') %}active{% endif %}" aria-current="page" href="{{ url_for('view_bp.home') }}">
+						<i class="bi-house-fill me-2"></i>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link link-body-emphasis px-2 active {% if request.path == url_for('view_bp.home') %}active{% endif %}" href="{{ url_for('view_bp.home') }}">
+						<i class="bi-gear me-2"></i>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link link-body-emphasis px-2 active {% if request.path == url_for('view_bp.home') %}active{% endif %}" href="{{ url_for('view_bp.home') }}">
+						<i class="bi-question-circle me-2"></i>
+					</a>
+				</li>
+			</ul>
+			
+			<ul class="nav flex-row ms-auto">
+			
+				<li class="nav-item border-left mt-auto ">
+					<a class="nav-link link-body-emphasis px-2 active" href="/admin">
+						<i class="bi-box-arrow-left me-2"></i>
+						Logout
+					</a>
+				</li>
+			</ul>
+		</div>
+	 </nav>
+
+<!-- HEADER -->
+
+	<header id="navbar" class="navbar sticky-top flex-sm-nowrap ">
+		<div class="col-10 col-lg-10 me-0 px-3 fs-6 header-justify-center">
+			<a class="navbar-brand" href="{{url_for('view_bp.home')}}">
+				<img src="static/images/fluid_core_logo.svg" class="profile-image img-fluid" alt="">
+				ConstrAPP.
+			</a>
+		</div>
+		<div class="col-2 col-lg-2 mb-3 mb-lg-0 ms-auto" role="search">
+			<button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+				 <span class="navbar-toggler-icon"></span>
+			</button>
+	  </div>
+	  
+	  <nav id="sidebarMenu" class="col-md-3 col-lg-3  sidebar collapse">
+		<div class="py-3 px-3">
+			<ul class="nav flex-column h-100">
+				 <li class="nav-item">
+					  <a href="#section1" class="nav-link link-body-emphasis px-2">
+							<i class="bi-house-fill me-2"></i> Home
+					  </a>
+				 </li>
+				 <li class="nav-item">
+					  <a href="#section2" class="nav-link link-body-emphasis px-2">
+							<i class="bi bi-pencil-square me-2"></i> Create
+					  </a>
+				 </li>
+				 <li class="nav-item">
+					  <a href="#section3" class="nav-link link-body-emphasis px-2">
+							<i class="bi bi-view-list me-2"></i> View
+					  </a>
+				 </li>
+				 <li class="nav-item">
+					  <a href="#section4" class="nav-link link-body-emphasis px-2">
+							<i class="bi-box-arrow-left me-2"></i> Submit
+					  </a>
+				 </li>
+			</ul>
+	  </div>
+	  
+	  </nav>
+   </header>
+<!-- MAIN CONTENT -->
+
+
+<!--main section introduction-->
+<section id="section1">
+	<div >
+		<div style="display: flex; justify-content: center; align-items: center; height: 80vh;">
+			<div style="width: 100%; text-align: center; padding: 20px;">
+			  <h2 class='m-3'>APP BOILERPLATE UI</h2>
+			  	<p>Minimum coding | Maximum control</p>
+				<P class="p-heading"> CREATE  APPS AND REUSABLE TEMPLATES IN SECONDS</p>
+			  <img src="static/images/coding/python.png" alt="Python" style="width: 50px; margin-bottom: 10px;">
+			  <img src="static/images/coding/flask.png" alt="Flask" style="width: 50px; margin-bottom: 10px;">
+			  <img src="static/images/coding/html.png" alt="HTML" style="width: 50px; margin-bottom: 10px;">
+			  <img src="static/images/coding/css.png" alt="CSS" style="width: 50px; margin-bottom: 10px;">
+			  <img src="static/images/coding/js.png" alt="JavaScript" style="width: 50px; margin-bottom: 10px;">
+			</div>
+		 </div> 
+	</div>
+	</div>
+
+	<section class="milestone-section">
+		<h6 class="h4 h-alt mb-4">Create.</h6>
+		<div class="milestone-container">
+		  <div class="milestone">
+			 <span>Update the Models Class to create Database tables</span>
+		  </div>
+		  <div class="milestone">
+			 <span>HTML documents are generated directly from the Model Classes</span>
+		  </div>
+		  <div class="milestone">
+			 <span>Customize the generated HTML documents for personalized Function</span>
+		  </div>
+		</div>
+	 </section> 
+</section>    
+
+
+
+<!--BASE extends-->
+        <div class="row">
+            <main >
+                {% block content %}
+                {% endblock %}
+                <footer class="site-footer">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12 col-12">
+                                <p class="copyright-text">Copyright © ConstrAPP {{year_now}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </main>
+        </div>
+
+
+<!-- SCRIPTS -->
+
+    <script src="static/js/jquery.min.js"></script>
+    <script src="static/js/apexcharts.min.js"></script>
+    <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper.min.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,301 @@
+{% extends "base.html" %}
+{% block content%}
+
+<!-- APP CREATION AND UPDATING-->
+<div class="container-fluid col-md-12 m-auto py-4 col-lg-12 px-md-4">
+	<section id="section2" class="main-wrapper">
+		<div  class=" row my-4 p-3">
+			 <div class="col-12">
+				  <div class="custom-block bg-white">
+						<ul class="nav nav-tabs" id="myTab" role="tablist">
+							 <li class="nav-item" role="presentation">
+								  <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="true">Model Class</button>
+							 </li>
+
+							 <li class="nav-item" role="presentation">
+								  <button class="nav-link" id="password-tab" data-bs-toggle="tab" data-bs-target="#password-tab-pane" type="button" role="tab" aria-controls="password-tab-pane" aria-selected="false">Template Theme</button>
+							 </li>
+
+							 <li class="nav-item" role="presentation">
+								  <button class="nav-link" id="notification-tab" data-bs-toggle="tab" data-bs-target="#notification-tab-pane" type="button" role="tab" aria-controls="notification-tab-pane" aria-selected="false">Notification</button>
+							 </li>
+						</ul>
+
+						<div class="tab-content" id="myTabContent">
+							 <div class="tab-pane fade show active" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+
+									<form id="model-form" class="custom-form profile-form"  onsubmit="generateJSON(event)">
+									   <input class="form-control" type="text" id="class-name" name="class-name"  placeholder="modelClassName"  required> 
+										<hr>
+										
+										<div class=" row my-4">
+											<div class="col-lg-12 col-12 ">
+												<div class="custom-block ">
+													<div id="columns">
+														<h6>Columns</h6><hr>
+													
+													<div class="table-responsive">
+													<table class="account-table table" id="columns">
+														<thead>
+															<tr>
+																<th>Column Name</th>
+																<th>Data Type</th>
+																<th>Length</th>
+																<th>Nullable</th>
+																<th>Primary Key</th>
+																<th>Actions</th>
+															</tr>
+														</thead>
+														<tbody>
+															<!-- Dynamic rows will be added here -->
+														</tbody>
+													</table>
+													</div>
+												</div>
+
+													<div class="d-flex justify-content-between mt-5">
+														<button type="button" class="btn custom-btn me-3" onclick="addColumn()"> Add columns  </button>
+														<button type="submit" class="form-control me-3">Preview JSON</button>
+													</div>
+													<hr>
+													<div class="mt-5 bg" >
+														<h6>Generated JSON</h6>
+														<pre id="output"  class= "bg-black" style="color:chocolate"></pre>
+														<button class="btn custom-btn custom-btn-bg-white mt-3" type="submit" id="update-model-btn" onclick="updateModels()" style="display: none;">Update Models</button>
+													</div>
+
+
+												</div>
+											</div>
+										</div>
+									</form>
+							 </div>
+
+							 <div class="tab-pane fade" id="password-tab-pane" role="tabpanel" aria-labelledby="password-tab" tabindex="0">
+								  <h6 class="mb-4">Password</h6>
+
+								  <form class="custom-form password-form" action="#" method="post" role="form">
+										<input type="password" name="password" id="password"  class="form-control" placeholder="Project Path" required="">
+
+										<input type="password" name="confirm_password" id="confirm_password" pattern="[0-9a-zA-Z]{4,10}" class="form-control" placeholder="Confirm Password" required="">
+
+										<div class="d-flex">
+											 <button type="button" class="form-control me-3">
+												  Reset
+											 </button>
+
+											 <button type="submit" class="form-control ms-2">
+												  Update Password
+											 </button>
+										</div>
+								  </form>
+							 </div>
+
+							 <div class="tab-pane fade" id="notification-tab-pane" role="tabpanel" aria-labelledby="notification-tab" tabindex="0">
+								  <h6 class="mb-4">Notification</h6>
+
+								  <form class="custom-form notification-form" action="#" method="post" role="form">
+
+										<div class="form-check form-switch d-flex mb-3 ps-0">
+											 <label class="form-check-label" for="flexSwitchCheckCheckedOne">Account activity</label>
+
+											 <input class="form-check-input ms-auto" type="checkbox" name="form-check-input" role="switch" id="flexSwitchCheckCheckedOne" checked>
+										</div>
+
+										<div class="form-check form-switch d-flex mb-3 ps-0">
+											 <label class="form-check-label" for="flexSwitchCheckCheckedTwo">Payment updated</label>
+
+											 <input class="form-check-input ms-auto" type="checkbox" name="form-check-input" role="switch" id="flexSwitchCheckCheckedTwo" checked>
+										</div>
+
+										<div class="d-flex mt-4">
+											 <button type="button" class="form-control me-3">
+												  Reset
+											 </button>
+
+											 <button type="submit" class="form-control ms-2">
+												  Update Password
+											 </button>
+										</div>
+								  </form>
+							 </div>
+						</div>
+				  </div>
+			 </div>
+		</div>
+	</section>
+
+
+
+<!--VIEW APPLICATION BEFORE IMPLEMENTTATION-->
+<section id="section3" >
+	<br>
+	<form action="/view-models" method="post" id="refresh-form">
+		<div class="structure-header d-flex justify-content-between">
+		  <h6>Application Structure</h6>
+		  <button type="submit" id="refresh-btn" class="btn custom-btn">Refresh</button>
+		</div>
+		<section class="structure-section row">
+		  <div class="structure-container-main ">
+			 <h6>Existing Models</h6>
+				{% if models %}
+					{% for model_name, columns in models.items() %}
+					<div class="card">
+						<div class="card-header">
+							<h6>{{ model_name }}</h6>
+							<span>&#x25BC;</span> <!-- Down arrow indicator -->
+						</div>
+						<ul class="card-body">
+							{% for column in columns %}
+							<li>{{ column.name | capitalize }} ({{ column.type }})</li>
+							{% endfor %}
+						</ul>
+					</div>
+					{% endfor %}
+				{% else %}
+					loading...
+				{% endif%}
+				
+		  </div>
+		  <div class="structure-container-main ">
+			 <h6>HTML Templates</h6>
+			 <pre id="db-actions" class="pre-content">No actions available.</pre>
+		  </div>
+		  <div class="structure-container-main ">
+			 <h6>DB Actions</h6>
+			 <pre id="db-actions" class="pre-content">No actions available.</pre>
+		  </div>
+		  <div class="structure-container-main ">
+			 <h6>Routes</h6>
+			 <pre id="routes" class="pre-content">No routes available.</pre>
+		  </div>
+		</section>
+	 </form>
+
+
+	 
+	<form action="/view-structure" method="post" id="view-structure-form">
+		<div class="structure-header d-flex justify-content-between">
+			<h6>Folder Structure & Files</h6>
+			<button type="submit" id="refresh-structure" class="btn custom-btn">Refresh Files</button>
+		 </div>
+			<div class="folder-structure mt-4" >
+				
+				{{ structure_html | safe }}
+			</div>
+
+		 <section class="structure-section row">
+			
+				 {% if structure_items %}
+					  {% for key, value in structure_items %}
+							<div class="structure-container-main ">
+								 <h6>{{ key }}</h6>
+								 <pre class="pre-content">{{ value }}</pre>
+							</div>
+					  {% endfor %}
+				 {% else %}
+					  <p>No structure data available. Refresh</p>
+				 {% endif %}
+			
+	  	</section> 
+	</form>
+</section>
+
+
+<!--IMPLEMENTTATION OF THE APPLICATION STRUCTURE-->
+<section id="section4" >
+</div>	
+	  <div class="milestone-container mt-4" >
+		<h6 class="mb-4">Create Project</h6>
+		<p> The project file will be created in the specified path. </p>
+		<form action="/create-boilerplate" method="post">
+			<div class="row">
+			<input type="text" id="project_path" name="project_path"  class="form-control" placeholder="Project Path" required=""><br><br>
+			<input type="text" id="project_name" name="project_name"  class="form-control" placeholder="Project Name" required=""><br><br>
+		</div>
+			
+			<button class="btn custom-btn  mt-3" type="submit">Create Project</button>
+			
+		</form>
+		</div>
+</section>
+
+	  
+
+<script>
+	function addColumn() {
+		const tableBody = document.querySelector('#columns tbody');
+		const row = document.createElement('tr');
+		row.innerHTML = `
+			 <td scope="row"><input type="text" name="column-name[]" required></td>
+			 <td class="text-danger" scope="row">
+				  <select name="data-type[]" required>
+						<option value="String">String</option>
+						<option value="Integer">Integer</option>
+						<option value="Float">Float</option>
+						<option value="DateTime">DateTime</option>
+						<option value="Boolean">Boolean</option>
+				  </select>
+			 </td>
+			 <td scope="row" ><input type="number" name="length[]" min="1"></td>
+			 <td class="text-danger" scope="row">
+				  <select name="nullable[]">
+						<option value="True">True</option>
+						<option value="False" selected>False</option>
+				  </select>
+			 </td>
+			 <td class="text-danger" scope="row">
+				  <select name="primary-key[]">
+						<option value="True">True</option>
+						<option value="False" selected>False</option>
+				  </select>
+			 </td>
+			 <td class="text-danger" scope="row">
+					<span >
+				  		<button  class="badge" onclick="deleteColumn(this)">delete</button>
+				  </span>
+			 </td>
+		`;
+		tableBody.appendChild(row);
+  }
+
+  function deleteColumn(button) {
+		const row = button.closest('tr');
+		row.remove();
+  }
+	let currentJSON = null;
+
+	function generateJSON(event) {
+			event.preventDefault();
+			const className = document.getElementById('class-name').value;
+			const columnNames = document.getElementsByName('column-name[]');
+			const dataTypes = document.getElementsByName('data-type[]');
+			const lengths = document.getElementsByName('length[]');
+			const nullables = document.getElementsByName('nullable[]');
+			const primaryKeys = document.getElementsByName('primary-key[]');
+
+			const columns = [];
+
+			for (let i = 0; i < columnNames.length; i++) {
+					const column = {
+							name: columnNames[i].value,
+							data_type: dataTypes[i].value,
+							length: lengths[i].value ? parseInt(lengths[i].value) : null,
+							nullable: nullables[i].value === "True",
+							primary_key: primaryKeys[i].value === "True"
+					};
+					columns.push(column);
+			}
+
+			currentJSON = {
+					class_name: className,
+					columns: columns
+			};
+
+			document.getElementById('output').textContent = JSON.stringify(currentJSON, null, 4);
+			document.getElementById('update-model-btn').style.display = 'block';
+	}
+
+	</script>
+
+{% endblock %}
