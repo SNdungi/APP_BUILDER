@@ -1130,7 +1130,21 @@ PROGRESS BAR
   padding: 20px;
   border: 1px solid #99b4a5;
   box-shadow: 10px 10px  rgba(37, 94, 75, 0.2); /* Add subtle shadow */
-  margin-bottom: 20px; /* Add spacing between sections */
+  margin-bottom: 20px;
+  background-color: rgba(236, 233, 233, 0.2); /* Add spacing between sections */
+}
+
+.milestone-cont {
+  display: flex;
+  flex-direction: column; /* Stack milestones vertically */
+  align-items: flex-start; /* Align milestones to the left */
+  width: 100%;
+  max-width: 600px; /* Restrict width on larger devices */
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #99b4a5;
+  box-shadow: 10px 10px  rgba(37, 94, 75, 0.2); /* Add subtle shadow */
+  margin-bottom: 20px;
 }
 
 .milestone {

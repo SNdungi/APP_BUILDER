@@ -1,6 +1,14 @@
 {% extends "base.html" %}
 {% block content%}
 
+<style>
+	iframe {
+		 width: 100%;
+		 height: 500px;
+		 border: none;
+	}
+</style>
+
 <!-- APP CREATION AND UPDATING-->
 <div class="container-fluid col-md-12 m-auto py-4 col-lg-12 px-md-4">
 	<section id="section2" class="main-wrapper">
@@ -127,6 +135,8 @@
 
 
 
+
+
 <!--VIEW APPLICATION BEFORE IMPLEMENTTATION-->
 <section id="section3" >
 	<br>
@@ -142,15 +152,18 @@
 					{% for model_name, columns in models.items() %}
 					<div class="card">
 						<div class="card-header">
-							<h6>{{ model_name }}</h6>
-							<span>&#x25BC;</span> <!-- Down arrow indicator -->
+							 <button  type="button" class="btn btn-danger btn-sm me-3" onclick="removeModel('{{ model_name }}')">
+								  <i class="fas fa-trash"></i>
+							 </button>
+							 <h6>{{ model_name }}</h6>
+							 <span>&#x25BC;</span> <!-- Down arrow indicator -->
 						</div>
 						<ul class="card-body">
-							{% for column in columns %}
-							<li>{{ column.name | capitalize }} ({{ column.type }})</li>
-							{% endfor %}
+							 {% for column in columns %}
+							 <li>{{ column.name | capitalize }} ({{ column.type }})</li>
+							 {% endfor %}
 						</ul>
-					</div>
+				  </div>
 					{% endfor %}
 				{% else %}
 					loading...
@@ -200,6 +213,8 @@
 	  	</section> 
 	</form>
 </section>
+
+<iframe src="static/images/base.html"></iframe>
 
 
 <!--IMPLEMENTTATION OF THE APPLICATION STRUCTURE-->
@@ -299,3 +314,49 @@
 	</script>
 
 {% endblock %}
+<script>
+function updateModels() {
+    if (!currentJSON) {
+        alert('Please generate JSON first');
+        return;
+    }
+
+    fetch('/update-models', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(currentJSON)
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Display the exact message from backend
+        alert(`${data.status.toUpperCase()}: ${data.message}`);
+        if (data.status === 'success') {
+            // Refresh the models view
+            document.getElementById('refresh-form').submit();
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error updating models');
+    });
+}
+</script>
+
+<script>
+	function removeModel(className) {
+		if (confirm(`Are you sure you want to remove ${className} model?`)) {
+			fetch(`/remove-model/${className}`, {
+					method: 'POST',
+			})
+			.then(response => response.json())
+			.then(data => {
+					alert(data.message);
+					if (data.status === 'success') {
+						document.getElementById('refresh-form').submit();
+					}
+			});
+		}
+	}
+</script>

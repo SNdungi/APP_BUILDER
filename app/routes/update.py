@@ -40,7 +40,7 @@ def update_models():
     
         # Handle data type
         if column['length']:
-            column_def += f"db.{column['data_type']}({column['length']}"
+            column_def += f"db.{column['data_type']}({column['length']})"
         else:
             column_def += f"db.{column['data_type']}"
     
@@ -58,7 +58,7 @@ def update_models():
         new_model_code += column_def
 
     # Update the structure dictionary
-    structure['app']['models.py'] = structure['app']['models.py'].rstrip() + new_model_code
+    structure['AppName']['app']['models.py'] = structure['AppName']['app']['models.py'].rstrip() + new_model_code
 
     # Increment version and save the structure in the database
     latest_version = StructureHistory.query.order_by(StructureHistory.version.desc()).first()
@@ -73,6 +73,7 @@ def update_models():
     construct_path = os.path.join(os.path.dirname(__file__), 'construct.py')
     with open(construct_path, 'w') as f:
         f.write(f"structure = {json.dumps(structure, indent=4)}")
+        
 
     return jsonify({'status': 'success', 'message': 'Models updated and versioned successfully'})
 
@@ -105,9 +106,6 @@ def rollback_structure():
         return jsonify({'status': 'success', 'message': f'Structure rolled back to version {version}'})
     else:
         return jsonify({'status': 'error', 'message': f'No structure found for version {version}'})
-
-
-
 
 
 #_____________________________

@@ -1,0 +1,16 @@
+{% macro css(filename, *varargs, **kwargs) %}
+    <link href="{{ url_for('static', filename=filename) }}" rel="stylesheet" {% for key, value in kwargs.items() %}{{ key }}="{{ value }}" {% endfor %}>
+{% endmacro %}
+
+{% macro js(filename, *varargs, **kwargs) %}
+    <script src="{{ url_for('static', filename=filename) }}" {% for key, value in kwargs.items() %}{{ key }}="{{ value }}" {% endfor %}></script>
+{% endmacro %}
+
+{% macro image(filename, *varargs, **kwargs) %}
+    <img src="{{ url_for('static', filename=filename) }}" alt="{% if kwargs.alt %}{{ kwargs.alt }}{% else %}Image{% endif %}" {% for key, value in kwargs.items() %}{{ key }}="{{ value }}" {% endfor %}>
+{% endmacro %}
+
+{% macro font(filename, *varargs, **kwargs) %}
+    <link href="{{ url_for('static', filename=filename) }}" rel="stylesheet" type="font/woff2" {% for key, value in kwargs.items() %}{{ key }}="{{ value }}" {% endfor %}>
+{% endmacro %}
+

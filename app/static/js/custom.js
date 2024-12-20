@@ -119,3 +119,46 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 });
+
+function updateModels() {
+  if (!currentJSON) {
+      alert('Please generate JSON first');
+      return;
+  }
+
+  fetch('/update-models', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(currentJSON)
+  })
+  .then(response => response.json())
+  .then(data => {
+      if (data.status === 'success') {
+          alert('Models updated successfully!');
+          document.getElementById('refresh-form').submit();
+      } else {
+          alert('Error updating models: ' + data.message);
+      }
+  })
+  .catch(error => {
+      console.error('Error:', error);
+      alert('Error updating models');
+  });
+}
+
+function removeModel(className) {
+  if (confirm(`Are you sure you want to remove ${className} model?`)) {
+    fetch(`/remove-model/${className}`, {
+        method: 'POST',
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+        if (data.status === 'success') {
+          document.getElementById('refresh-form').submit();
+        }
+    });
+  }
+}

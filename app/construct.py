@@ -32,6 +32,8 @@ main = Blueprint('main', __name__)
 @main.route('/')
 def index():
     return render_template('index.html')
+    
+    
 """,
             "models.py": """\
 from . import db
@@ -136,3 +138,6 @@ python-dotenv==1.0.0
 """
     }
 }
+
+
+    
